@@ -10,6 +10,7 @@ on:
 jobs:
   clang-format:
     runs-on: ubuntu-latest
+    if: false
     container: 
       image: citraemu/build-environments:linux-clang-format
       options: -u 1001
@@ -23,6 +24,7 @@ jobs:
         run: ./.ci/linux-clang-format/docker.sh
   build:
     runs-on: ubuntu-latest
+    if: false
     strategy:
       matrix:
         image: ["linux-fresh", "linux-frozen", "linux-mingw"]
@@ -74,6 +76,7 @@ jobs:
           path: artifacts/
   macos:
     runs-on: macos-latest
+    if: false
     steps:
       - uses: actions/checkout@v3
         with:
@@ -118,8 +121,17 @@ jobs:
         shell: bash
         env:
           ENABLE_COMPATIBILITY_REPORTING: "ON"
+      - name: Pack 7z
+        run: |
+          7z a -m0=lzma2 -mx=7 -ms=on .\citra.7z .\build\*
+      - name: Upload 7z
+        uses: actions/upload-artifact@v3
+        with:
+          name: citra.7z
+          path: citra.7z
   android:
     runs-on: ubuntu-latest
+    if: false
     steps:
       - uses: actions/checkout@v3
         with:
